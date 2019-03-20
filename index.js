@@ -15,11 +15,9 @@ app.get('/ico', (req, res) => {
 });
 
 app.get('/', (req, res) => {
-  console.log(req.path);
   let redirectRequired = false;
   let params = {};
   if (req.query.cur_from && req.query.cur_to) {
-    console.log('cur captured');
     redirectRequired = true;
     req.query.pair = getCur(req.query.cur_to) + getCur(req.query.cur_from);
     delete req.query['cur_to'];
@@ -27,7 +25,6 @@ app.get('/', (req, res) => {
   }
 
   if (req.query.lang && req.query.lang !== req.query.lang.toLowerCase()) {
-    console.log('lang caputred');
     redirectRequired = true;
     req.query.lang =  req.query.lang.toLowerCase()
   }
@@ -44,6 +41,7 @@ app.get('/', (req, res) => {
 });
 
 app.use(express.static(path.resolve(__dirname, 'nexchange')));
+// remove below after solving /prices/undefined.png error
 app.use('*', express.static(public));
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'));
