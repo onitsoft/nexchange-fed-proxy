@@ -38,7 +38,7 @@ app.get('*', (req, res) => {
     res.redirect(req.path + '?' + params)
   }
 
-  res.sendFile(path.resolve(__dirname, 'nexchange', 'index.html'));
+  res.sendFile(path.resolve(process.env.NEXCHANGE_ROOT, 'index.html'));
 
 });
 
