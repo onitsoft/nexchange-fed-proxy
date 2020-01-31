@@ -10,7 +10,9 @@ const ICO_ROOT = process.env.ICO_ROOT
 app.use(helmet())
 
 // ico page
-app.use('/ico', express.static(path.resolve(ICO_ROOT)));
+//app.use('/ico', express.static(path.resolve(ICO_ROOT)));
+//Exclude index.html from static serving
+app.use(express.static(path.resolve(NEXCHANGE_ROOT),{index: false}));
 
 function getCur(qParam) {
     return qParam.toUpperCase().substr(-3);
@@ -54,7 +56,8 @@ var generalHandler = (req, res) => {
   if (redirectRequired) {
       params = req.query;
       params = Object.keys(params).map(key => key + '=' + params[key]).join('&');
-    res.redirect(req.path + '?' + params)
+      res.redirect(req.path + '?' + params)
+      return
   }
 
   res.sendFile(path.resolve(process.env.NEXCHANGE_ROOT, 'index.html'));
@@ -67,8 +70,7 @@ app.get('/order/:orderId', [orderUppercase, generalHandler]
 // For all other cases
 app.get('*', generalHandler);
 
-//Serving static files
-app.use(express.static(path.resolve(NEXCHANGE_ROOT)));
+
 
 app.listen(3000, () => console.log('Nexchange Frontend Proxy is listening on port 3000!'));
 
