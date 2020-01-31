@@ -31,11 +31,11 @@ app.get('*', (req, res) => {
     req.query.lang =  req.query.lang.toLowerCase()
   }
 
-
   if (redirectRequired) {
-      params = req.query;
-      params = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    params = req.query;
+    params = Object.keys(params).map(key => key + '=' + params[key]).join('&');
     res.redirect(req.path + '?' + params)
+    return
   }
 
   res.sendFile(path.resolve(process.env.NEXCHANGE_ROOT, 'index.html'));
