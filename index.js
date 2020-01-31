@@ -6,7 +6,7 @@ const NEXCHANGE_ROOT = process.env.NEXCHANGE_ROOT
 const ICO_ROOT = process.env.ICO_ROOT
 
 app.use('/ico', express.static(path.resolve(ICO_ROOT)));
-app.use(express.static(path.resolve(NEXCHANGE_ROOT)));
+app.use(express.static(path.resolve(NEXCHANGE_ROOT), {index: false}));
 
 function getCur(qParam) {
     return qParam.toUpperCase().substr(-3);
@@ -31,16 +31,17 @@ app.get('*', (req, res) => {
     req.query.lang =  req.query.lang.toLowerCase()
   }
 
-
   if (redirectRequired) {
-      params = req.query;
-      params = Object.keys(params).map(key => key + '=' + params[key]).join('&');
-    res.redirect(req.path + '?' + params)
+    params = req.query;
+    params = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+    res.redirect(req.path + '?' + params);
+    return;
   }
 
   res.sendFile(path.resolve(process.env.NEXCHANGE_ROOT, 'index.html'));
 
 });
+
 
 app.listen(3000, () => console.log('Nexchange Frontend Proxy is listening on port 3000!'));
 
