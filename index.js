@@ -9,8 +9,6 @@ const ICO_ROOT = process.env.ICO_ROOT
 //Helmet helps you secure your Express apps by setting various HTTP headers.
 app.use(helmet())
 
-// ico page
-//app.use('/ico', express.static(path.resolve(ICO_ROOT)));
 //Exclude index.html from static serving
 app.use(express.static(path.resolve(NEXCHANGE_ROOT),{index: false}));
 
