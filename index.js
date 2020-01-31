@@ -8,8 +8,9 @@ const ICO_ROOT = process.env.ICO_ROOT
 
 //Helmet helps you secure your Express apps by setting various HTTP headers.
 app.use(helmet())
+
+// ico page
 app.use('/ico', express.static(path.resolve(ICO_ROOT)));
-app.use(express.static(path.resolve(NEXCHANGE_ROOT)));
 
 function getCur(qParam) {
     return qParam.toUpperCase().substr(-3);
@@ -65,6 +66,9 @@ app.get('/order/:orderId', [orderUppercase, generalHandler]
 
 // For all other cases
 app.get('*', generalHandler);
+
+//Serving static files
+app.use(express.static(path.resolve(NEXCHANGE_ROOT)));
 
 app.listen(3000, () => console.log('Nexchange Frontend Proxy is listening on port 3000!'));
 
