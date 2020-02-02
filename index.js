@@ -1,10 +1,13 @@
 const express = require('express');
 const path = require('path');
+const helmet = require('helmet')
 
 const app = express();
 const NEXCHANGE_ROOT = process.env.NEXCHANGE_ROOT
 const ICO_ROOT = process.env.ICO_ROOT
 
+//Helmet helps you secure your Express apps by setting various HTTP headers.
+app.use(helmet())
 app.use('/ico', express.static(path.resolve(ICO_ROOT)));
 app.use(express.static(path.resolve(NEXCHANGE_ROOT), {index: false}));
 
