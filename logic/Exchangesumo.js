@@ -3,7 +3,7 @@ const Partner = require('./Partner.js')
 class Bestchange extends Partner {
 
   constructor() {
-    super('Bestchange', 'bestchange.ru')
+    super('Exchangesumo', 'exchangesumo.com')
   }
 
   getCur(qParam) {
@@ -34,13 +34,14 @@ class Bestchange extends Partner {
     return lang;
   }
 
-  isCard (referrer) {
-    return (referrer.indexOf('visa-mastercard') > -1);
+  isCard (params) {
+    return (referrer.indexOf('Card') > -1);
   }
 
   getReferrerCode (params) {
-    return params.ref;
+    return params.rid;
   }
+
 }
 
 module.exports = Bestchange;

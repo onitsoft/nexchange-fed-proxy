@@ -3,7 +3,7 @@ const Partner = require('./Partner.js')
 class Bestchange extends Partner {
 
   constructor() {
-    super('Bestchange', 'bestchange.ru')
+    super('Okchanger', 'okchanger.com')
   }
 
   getCur(qParam) {
@@ -34,8 +34,8 @@ class Bestchange extends Partner {
     return lang;
   }
 
-  isCard (referrer) {
-    return (referrer.indexOf('visa-mastercard') > -1);
+  isCard (params) {
+    return (referrer.indexOf('VISAMASTERCARD') > -1);
   }
 
   getReferrerCode (params) {

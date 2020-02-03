@@ -26,6 +26,13 @@ class Partner {
     return this.name;
   }
 
+  isCard (params) {
+    return false;
+  }
+
+  getReferrerCode (params) {
+    return '';
+  }
 }
 
 module.exports = Partner;
