@@ -1,12 +1,13 @@
-import 'Partner'
+const Partner = require('./Partner.js')
 
 class Bestchange extends Partner {
 
   constructor() {
     super('Bestchange', 'bestchange.ru')
+//    super('Bestchange', 'localhost')
   }
 
-  function getCur(qParam) {
+  getCur(qParam) {
     return qParam.toUpperCase().substr(-3);
   }
 
@@ -14,18 +15,29 @@ class Bestchange extends Partner {
     let pair
     if (params.cur_to && params.cur_from) {
       pair = getCur(params.cur_to) + getCur(params.cur_from);
+      this.redirectRequired = true;
     }
     else {
-      pair = 'USDBTC';
+      pair = '';
     }
     return pair;
   }
 
   getLang (params) {
-    return 'en';
+    let lang
+    if (params.lang && params.lang !== params.lang.toLowerCase()) {
+      lang = params.lang.toLowerCase()
+      this.redirectRequired = true;
+    }
+    else {
+      lang = '';
+    }
+    return lang;
   }
 
   getMethod (params) {
     return 'VISA';
   }
 }
+
+module.exports = Bestchange;

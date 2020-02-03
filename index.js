@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const helmet = require('helmet')
+const referrerSwitch = require('./logic/Switch.js')
 
 const app = express();
 const NEXCHANGE_ROOT = process.env.NEXCHANGE_ROOT
@@ -37,26 +38,40 @@ var orderUppercase = (req, res, next) => {
 // General handler for the rest of the URLs
 var generalHandler = (req, res) => {
 
-  let redirectRequired = false;
-  let params = {};
-  if (req.query.cur_from && req.query.cur_to) {
-    redirectRequired = true;
-    req.query.pair = getCur(req.query.cur_to) + getCur(req.query.cur_from);
-    delete req.query['cur_to'];
-    delete req.query['cur_from'];
+
+  if (req.header('Referer')) {
+      console.log("Referer", req.header('Referer'));
+
+    let rSwitch = new referrerSwitch(req.header('Referer'));
+    let referrer = rSwitch.getMatchingReferrer();
+
+    let params = {'lang': referrer.getLang(req.query),
+                'pair': referrer.getPair(req.query)};
+
+    console.log(req.header('Referer'), referrer.getName(), params);
+
+    if (referrer.redirectRequired) {
+        params = req.query;
+        params = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+        res.redirect(req.path + '?' + params);
+        return;
+    }
   }
 
-  if (req.query.lang && req.query.lang !== req.query.lang.toLowerCase()) {
-    redirectRequired = true;
-    req.query.lang =  req.query.lang.toLowerCase()
-  }
 
-  if (redirectRequired) {
-      params = req.query;
-      params = Object.keys(params).map(key => key + '=' + params[key]).join('&');
-      res.redirect(req.path + '?' + params)
-      return
-  }
+//  if (req.query.cur_from && req.query.cur_to) {
+//    redirectRequired = true;
+//    req.query.pair = getCur(req.query.cur_to) + getCur(req.query.cur_from);
+//    delete req.query['cur_to'];
+//    delete req.query['cur_from'];
+//  }
+//
+//  if (req.query.lang && req.query.lang !== req.query.lang.toLowerCase()) {
+//    redirectRequired = true;
+//    req.query.lang =  req.query.lang.toLowerCase()
+//  }
+
+
 
   res.sendFile(path.resolve(process.env.NEXCHANGE_ROOT, 'index.html'));
 };

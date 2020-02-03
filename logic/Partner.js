@@ -1,26 +1,31 @@
 class Partner {
-//  const name;
-//  const pay_methods = {}
-//  const referral;
 
-  var redirectRequired = false
-
-  constructor(name, referral) {
+  constructor(name, referrer) {
     this.name = name;
-    this.referral = referral;
+    this.referrer = referrer;
+    this.redirectRequired = false;
+  }
+
+  isReferrer (referrer) {
+    return (referrer.indexOf(this.referrer) != -1);
   }
 
   getPair (params) {
-    return 'USDBTC';
+    return '';
   }
 
   getLang (params) {
-    return 'en';
+    return '';
   }
 
   getMethod (params) {
-    return 'VISA';
+    return '';
   }
 
+  getName() {
+    return this.name;
+  }
 
 }
+
+module.exports = Partner;
