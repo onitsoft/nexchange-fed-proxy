@@ -6,14 +6,10 @@ class Bestchange extends Partner {
     super('Allchange', 'allchange.org')
   }
 
-  getCur(qParam) {
-    return qParam.toUpperCase().substr(-3);
-  }
-
-  getPair (params) {
+  getPair (params, referer) {
     let pair
     if (params.to && params.from) {
-      pair = getCur(params.cur_to) + getCur(params.cur_from);
+      pair = this.getCur(params.to) + this.getCur(params.from);
       this.redirectRequired = true;
     }
     else {

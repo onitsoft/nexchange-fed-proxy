@@ -6,14 +6,10 @@ class Bestchange extends Partner {
     super('Okchanger', 'okchanger.com')
   }
 
-  getCur(qParam) {
-    return qParam.toUpperCase().substr(-3);
-  }
-
-  getPair (params) {
+  getPair (params, referer) {
     let pair
     if (params.cur_to && params.cur_from) {
-      pair = getCur(params.cur_to) + getCur(params.cur_from);
+      pair = this.getCur(params.cur_to) + this.getCur(params.cur_from);
       this.redirectRequired = true;
     }
     else {

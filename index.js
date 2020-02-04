@@ -42,12 +42,12 @@ var generalHandler = (req, res) => {
 
   if (req.header('Referer')) {
 
-    let rHeader = req.header('Referer')
-    let rSwitch = new referrerSwitch();
+    let rHeader = req.header('Referer');
+    let rSwitch = new referrerSwitch(rHeader);
     let referrer = rSwitch.getMatchingReferrer();
 
     let params = {'lang': referrer.getLang(req.query),
-                'pair': referrer.getPair(req.query)};
+                'pair': referrer.getPair(req.query, rHeader)};
 
     if (referrer.isCard()) {
       params = req.query;
