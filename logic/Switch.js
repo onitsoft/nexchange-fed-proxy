@@ -1,6 +1,7 @@
 const bestchange = require('./Bestchange.js')
 const okchanger = require('./Okchanger.js')
 const exchangesumo = require('./Exchangesumo.js')
+const partner = require('./Partner.js')
 
 class Switch {
 
@@ -15,6 +16,7 @@ class Switch {
           return this.sites[i];
         }
       }
+      return new Partner('Unknown', this.referrer);
     }
 }
 

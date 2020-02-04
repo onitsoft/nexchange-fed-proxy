@@ -12,6 +12,7 @@ const OLD_SITE_URL = process.env.OLD_SITE_URL
 app.use(helmet())
 
 //Exclude index.html from static serving
+app.use('/ico', express.static(path.resolve(ICO_ROOT)));
 app.use(express.static(path.resolve(NEXCHANGE_ROOT),{index: false}));
 
 function getCur(qParam) {

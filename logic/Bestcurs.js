@@ -3,7 +3,7 @@ const Partner = require('./Partner.js')
 class Bestchange extends Partner {
 
   constructor() {
-    super('Exchangesumo', 'exchangesumo.com')
+    super('Bestcurs', 'bestcurs.org')
   }
 
   isCard (params) {
@@ -11,7 +11,11 @@ class Bestchange extends Partner {
   }
 
   getReferrerCode (params) {
-    return params.ref;
+    return params.r;
+  }
+
+  isCard (params) {
+    return (referrer.indexOf('Card') > -1);
   }
 
 }
