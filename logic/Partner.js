@@ -19,7 +19,7 @@ class Partner {
       }
     }
 
-    return '';
+    return false;
   }
 
   isReferrer (referrer) {

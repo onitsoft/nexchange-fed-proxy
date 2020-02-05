@@ -13,6 +13,7 @@ class Okchanger extends Partner {
     let pairA = this.matchCurrency(pairArr[0]);
     let pairB = this.matchCurrency(pairArr[1]);
     if (pairA !== false && pairB !== false) {
+      this.redirectRequired = true;
       return pairB+pairA;
     }
 

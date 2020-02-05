@@ -15,24 +15,21 @@ class Emon extends Partner {
     let path = referer.split('/');
 
     let pairA = this.matchCurrency(path[path.length-2]);
-    let pairB = this.matchCurrency(path[path.length-2]);
+    let pairB = this.matchCurrency(path[path.length-1]);
 
     if (pairA !== false && pairB !== false) {
+      this.redirectRequired = true;
       return pairB+pairA;
     }
 
     return '';
   }
 
-  isCard (referrer) {
-    return (referrer.indexOf('Card') > -1);
-  }
-
   getReferrerCode (params) {
     return params.rid;
   }
 
-  isCard (params) {
+  isCard (referrer) {
     return (referrer.indexOf('CARD') > -1);
   }
 

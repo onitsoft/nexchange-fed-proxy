@@ -7,12 +7,9 @@ class Kursexpert extends Partner {
     super('Kurs Expert', 'kurs.expert')
   }
 
-  isCard (referrer) {
-    return (referrer.indexOf('Card') > -1);
-  }
 
   getReferrerCode (params) {
-    return params.rid;
+    return params.ref;
   }
 
 }

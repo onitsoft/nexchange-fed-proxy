@@ -1,12 +1,14 @@
+const NEXCHANGE_ROOT = process.env.NEXCHANGE_ROOT;
+const ICO_ROOT = process.env.ICO_ROOT;
+const OLD_SITE_URL = process.env.OLD_SITE_URL;
+const DEVENV = process.env.DEVENV;
+
 const express = require('express');
 const path = require('path');
 const helmet = require('helmet')
 const referrerSwitch = require('./logic/Switch.js')
 
 const app = express();
-const NEXCHANGE_ROOT = process.env.NEXCHANGE_ROOT;
-const ICO_ROOT = process.env.ICO_ROOT;
-const OLD_SITE_URL = process.env.OLD_SITE_URL;
 
 //Helmet helps you secure your Express apps by setting various HTTP headers.
 app.use(helmet())
@@ -47,30 +49,24 @@ var generalHandler = (req, res) => {
       let rSwitch = new referrerSwitch(rHeader);
       let referrer = rSwitch.getMatchingReferrer();
 
-      console.log('Referrer',rHeader, referrer.getName(), req.query);
-
       let params = {'lang': referrer.getLang(req.query),
                   'pair': referrer.getPair(req.query, rHeader)};
 
       params = Object.keys(params).filter(key => params[key] !== '' ).map(key => key + '=' + params[key]).join('&');
 
-      console.log('App, params processed',params, referrer.redirectRequired)
-
       if (referrer.isCard(rHeader)) {
-
-        console.log("card redirect",OLD_SITE_URL + '?' + params)
         res.redirect(OLD_SITE_URL + '?' + params);
-
         return;
       }
       else if (referrer.redirectRequired) {
-
         res.redirect(req.path + '?' + params);
         return;
       }
     }
     catch(e) {
-      console.log(e);
+      if (DEVENV) {
+        console.log(e);
+      }
     }
   }
 

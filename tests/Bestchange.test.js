@@ -6,7 +6,7 @@ describe('Lang test', () => {
       return request(app)
               .get("/")
               .query({ lang: 'RU' })
-              .set('Referer', 'bestchange.ru')
+              .set('Referer', 'https://bestchange.ru')
               .expect('Location', "/?lang=ru")
               .expect(302);
   })
@@ -17,7 +17,7 @@ describe('Pair test', () => {
       return request(app)
               .get("/")
               .query({ cur_from: 'BTC', cur_to: 'USD' })
-              .set('Referer', 'bestchange.ru')
+              .set('Referer', 'https://bestchange.ru')
               .expect('Location', "/?pair=USDBTC")
               .expect(302);
   })
@@ -28,7 +28,7 @@ describe('Card test', () => {
       return request(app)
               .get("/")
               .query({ cur_from: 'BTC', cur_to: 'USD' })
-              .set('Referer', 'www.bestchange.ru/visa-mastercard-usd-to-bitcoin.html')
+              .set('Referer', 'https://www.bestchange.ru/visa-mastercard-usd-to-bitcoin.html')
               .expect(function(res) {
                 if (res.header.location.indexOf(process.env.OLD_SITE_URL) == -1) {
                   throw new Error("Location is not OLD SITE URL");
