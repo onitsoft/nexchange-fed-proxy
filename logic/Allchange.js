@@ -30,4 +30,4 @@ class Allchange extends Partner {
 
 }
 
-module.exports = Bestchange;
+module.exports = Allchange;

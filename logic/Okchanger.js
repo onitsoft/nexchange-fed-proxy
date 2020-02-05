@@ -28,4 +28,4 @@ class Okchanger extends Partner {
   }
 }
 
-module.exports = Bestchange;
+module.exports = Okchanger;

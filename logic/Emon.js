@@ -38,4 +38,4 @@ class Emon extends Partner {
 
 }
 
-module.exports = Bestchange;
+module.exports = Emon;

@@ -73,8 +73,5 @@ app.get('/order/:orderId', [orderUppercase, generalHandler]
 // For all other cases
 app.get('*', generalHandler);
 
-
-
-app.listen(3000, () => console.log('Nexchange Frontend Proxy is listening on port 3000!'));
-
+module.exports = app;
 

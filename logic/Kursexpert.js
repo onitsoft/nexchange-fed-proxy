@@ -17,4 +17,4 @@ class Kursexpert extends Partner {
 
 }
 
-module.exports = Bestchange;
+module.exports = Kursexpert;

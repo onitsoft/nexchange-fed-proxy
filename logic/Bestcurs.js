@@ -33,4 +33,4 @@ class Bestcurs extends Partner {
 
 }
 
-module.exports = Bestchange;
+module.exports = Bestcurs;

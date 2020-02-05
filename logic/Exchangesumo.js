@@ -28,4 +28,4 @@ class Exchangesumo extends Partner {
 
 }
 
-module.exports = Bestchange;
+module.exports = Exchangesumo;

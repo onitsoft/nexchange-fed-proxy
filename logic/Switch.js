@@ -20,7 +20,7 @@ class Switch {
           return this.sites[i];
         }
       }
-      return new Partner('Unknown', this.referrer);
+      return new partner('Unknown', this.referrer);
     }
 }
 
