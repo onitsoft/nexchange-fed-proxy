@@ -24,7 +24,7 @@ class Emon extends Partner {
     return '';
   }
 
-  isCard (params) {
+  isCard (referrer) {
     return (referrer.indexOf('Card') > -1);
   }
 

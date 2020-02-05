@@ -4,9 +4,9 @@ const helmet = require('helmet')
 const referrerSwitch = require('./logic/Switch.js')
 
 const app = express();
-const NEXCHANGE_ROOT = process.env.NEXCHANGE_ROOT
-const ICO_ROOT = process.env.ICO_ROOT
-const OLD_SITE_URL = process.env.OLD_SITE_URL
+const NEXCHANGE_ROOT = process.env.NEXCHANGE_ROOT;
+const ICO_ROOT = process.env.ICO_ROOT;
+const OLD_SITE_URL = process.env.OLD_SITE_URL;
 
 //Helmet helps you secure your Express apps by setting various HTTP headers.
 app.use(helmet())
@@ -42,27 +42,38 @@ var generalHandler = (req, res) => {
 
   if (req.header('Referer')) {
 
-    let rHeader = req.header('Referer');
-    let rSwitch = new referrerSwitch(rHeader);
-    let referrer = rSwitch.getMatchingReferrer();
+    try {
+      let rHeader = req.header('Referer');
+      let rSwitch = new referrerSwitch(rHeader);
+      let referrer = rSwitch.getMatchingReferrer();
 
-    let params = {'lang': referrer.getLang(req.query),
-                'pair': referrer.getPair(req.query, rHeader)};
+      console.log('Referrer',rHeader, referrer.getName(), req.query);
 
-    if (referrer.isCard()) {
-      params = req.query;
-      params = Object.keys(params).map(key => key + '=' + params[key]).join('&');
-      res.redirect(OLD_SITE_URL + '?' + params);
-      return;
+      let params = {'lang': referrer.getLang(req.query),
+                  'pair': referrer.getPair(req.query, rHeader)};
+
+      params = Object.keys(params).filter(key => params[key] !== '' ).map(key => key + '=' + params[key]).join('&');
+
+      console.log('App, params processed',params, referrer.redirectRequired)
+
+      if (referrer.isCard(rHeader)) {
+
+        console.log("card redirect",OLD_SITE_URL + '?' + params)
+        res.redirect(OLD_SITE_URL + '?' + params);
+
+        return;
+      }
+      else if (referrer.redirectRequired) {
+
+        res.redirect(req.path + '?' + params);
+        return;
+      }
     }
-    else if (referrer.redirectRequired) {
-      params = req.query;
-      params = Object.keys(params).map(key => key + '=' + params[key]).join('&');
-      res.redirect(req.path + '?' + params);
-      return;
+    catch(e) {
+      console.log(e);
     }
-
   }
+
   res.sendFile(path.resolve(process.env.NEXCHANGE_ROOT, 'index.html'));
 };
 

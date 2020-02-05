@@ -19,7 +19,7 @@ class Okchanger extends Partner {
     return '';
     }
 
-  isCard (params) {
+  isCard (referrer) {
     return (referrer.indexOf('VISAMASTERCARD') > -1);
   }
 

@@ -7,20 +7,24 @@ class Allchange extends Partner {
   }
 
   getPair (params, referer) {
-    let pair
-    let path = referer.split('/')
-    let direction = path[path.length-1]
+
+    let path = referer.split('/');
+    let direction = path[path.length-1];
     if (direction.indexOf('direction') > -1) {
-      let dirArr = direction.split('=')
-      let pairArr =  dirArr[dirArr.length-1].split('_')
-      if (pairA  && pairB ) {
+      let dirArr = direction.split('=');
+      let pairArr =  dirArr[dirArr.length-1].split('_');
+      let pairA = this.matchCurrency(pairArr[0]);
+      let pairB = this.matchCurrency(pairArr[1]);
+      if (pairA && pairB) {
+        this.redirectRequired = true;
         return pairB+pairA;
       }
     }
+
     return '';
   }
 
-  isCard (params) {
+  isCard (referrer) {
     return (referrer.indexOf('CARD') > -1);
   }
 

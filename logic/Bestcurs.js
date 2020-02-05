@@ -27,7 +27,7 @@ class Bestcurs extends Partner {
     return params.r;
   }
 
-  isCard (params) {
+  isCard (referrer) {
     return (referrer.indexOf('Card') > -1);
   }
 

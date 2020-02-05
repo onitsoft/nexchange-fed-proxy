@@ -14,11 +14,12 @@ class Partner {
   matchCurrency(str) {
     str = str.toUpperCase();
     for (var i=0; i<this.currencies.length; i++) {
-      if (str.indexOf(currencies[i] > -1)) {
-        return currencies[i];
+      if (str.indexOf(this.currencies[i]) > -1) {
+        return this.currencies[i];
       }
     }
-    return false;
+
+    return '';
   }
 
   isReferrer (referrer) {
