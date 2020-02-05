@@ -1,6 +1,6 @@
 const Partner = require('./Partner.js')
 
-class Bestchange extends Partner {
+class Bestcurs extends Partner {
 
   constructor() {
     super('Bestcurs', 'bestcurs.org')

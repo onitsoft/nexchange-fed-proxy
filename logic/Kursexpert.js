@@ -1,6 +1,7 @@
 const Partner = require('./Partner.js')
 
-class Bestchange extends Partner {
+//Haven't found n.exchange reference on this site.
+class Kursexpert extends Partner {
 
   constructor() {
     super('Kurs Expert', 'kurs.expert')

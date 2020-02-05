@@ -1,34 +1,23 @@
 const Partner = require('./Partner.js')
 
-class Bestchange extends Partner {
+class Okchanger extends Partner {
 
   constructor() {
     super('Okchanger', 'okchanger.com')
   }
 
   getPair (params, referer) {
-    let pair
-    if (params.cur_to && params.cur_from) {
-      pair = this.getCur(params.cur_to) + this.getCur(params.cur_from);
-      this.redirectRequired = true;
-    }
-    else {
-      pair = '';
-    }
-    return pair;
-  }
 
-  getLang (params) {
-    let lang
-    if (params.lang && params.lang !== params.lang.toLowerCase()) {
-      lang = params.lang.toLowerCase()
-      this.redirectRequired = true;
+    let path = referer.split('/');
+    let pairArr = path[path.length-1].split('to');
+    let pairA = this.matchCurrency(pairArr[0]);
+    let pairB = this.matchCurrency(pairArr[1]);
+    if (pairA !== false && pairB !== false) {
+      return pairB+pairA;
     }
-    else {
-      lang = '';
+
+    return '';
     }
-    return lang;
-  }
 
   isCard (params) {
     return (referrer.indexOf('VISAMASTERCARD') > -1);
