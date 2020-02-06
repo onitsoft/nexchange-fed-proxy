@@ -44,28 +44,32 @@ var generalHandler = (req, res) => {
 
   if (req.header('Referer')) {
 
-    try {
-      let rHeader = req.header('Referer');
-      let rSwitch = new referrerSwitch(rHeader);
-      let referrer = rSwitch.getMatchingReferrer();
+    let rHeader = req.header('Referer');
+    //If traffic comes from partner
+    if (rHeader.indexOf('n.exchange') == -1) {
+      try {
 
-      let params = {'lang': referrer.getLang(req.query),
-                  'pair': referrer.getPair(req.query, rHeader)};
+        let rSwitch = new referrerSwitch(rHeader);
+        let referrer = rSwitch.getMatchingReferrer();
 
-      params = Object.keys(params).filter(key => params[key] !== '' ).map(key => key + '=' + params[key]).join('&');
+        let params = {'lang': referrer.getLang(req.query),
+                    'pair': referrer.getPair(req.query, rHeader)};
 
-      if (referrer.isCard(rHeader)) {
-        res.redirect(OLD_SITE_URL + '?' + params);
-        return;
+        params = Object.keys(params).filter(key => params[key] !== '' ).map(key => key + '=' + params[key]).join('&');
+
+        if (referrer.isCard(rHeader)) {
+          res.redirect(OLD_SITE_URL + '?' + params);
+          return;
+        }
+        else if (referrer.redirectRequired) {
+          res.redirect(req.path + '?' + params);
+          return;
+        }
       }
-      else if (referrer.redirectRequired) {
-        res.redirect(req.path + '?' + params);
-        return;
-      }
-    }
-    catch(e) {
-      if (DEVENV) {
-        console.log(e);
+      catch(e) {
+        if (DEVENV) {
+          console.log(e);
+        }
       }
     }
   }
