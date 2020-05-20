@@ -6,6 +6,7 @@ const url = require("url");
 const app = express();
 const NEXCHANGE_ROOT = process.env.NEXCHANGE_ROOT;
 const ICO_ROOT = process.env.ICO_ROOT;
+const languageRedirect = true;
 
 //Helmet helps you secure your Express apps by setting various HTTP headers.
 app.use(helmet());
@@ -24,7 +25,7 @@ app.get("/ico", (req, res) => {
 const orderUppercase = (req, res, next) => {
   const orderIdUP = req.params.orderId.toUpperCase();
   if (req.params.orderId !== orderIdUP) {
-    res.redirect(`/${lang}/order/${orderIdUP}`);
+    res.redirect(`/order/${orderIdUP}`);
   } else {
     next();
   }
@@ -32,7 +33,6 @@ const orderUppercase = (req, res, next) => {
 
 // General handler for the rest of the URLs
 const generalHandler = (req, res) => {
-  let host = undefined;
   let urlPath = req.path;
   const langInPath = urlPath.split("/")[1];
   const langInParam = req.query.lang ? req.query.lang.toLowerCase() : undefined;
@@ -40,15 +40,16 @@ const generalHandler = (req, res) => {
   const fromCurr = req.query.cur_from;
   const toCurr = req.query.cur_to;
   const validLanguages = ["en", "de", "ru"];
+  const stagingPaymentMethods = [
+    { code: "ADVC", name: "ADVCASH" },
+    { code: "PR", name: "PAYEER" },
+  ];
+  let stagingPaymentMethod = undefined;
 
   let redirectRequired = false;
 
-  // Dont add language path in url, if its not n.exchange
-  if (
-    !req.headers.host.includes("n.exchange") &&
-    !req.headers.host.includes("localhost")
-  )
-    lang = "";
+  // Dont add language path in url if set to false
+  if (!languageRedirect) lang = "";
 
   if (validLanguages.includes(langInPath)) {
     res.header("Set-Cookie", `i18next=${lang}`);
@@ -60,11 +61,19 @@ const generalHandler = (req, res) => {
   }
 
   if (fromCurr && toCurr) {
-    const fromCurrType = fromCurr.substr(0, fromCurr.length - 3);
+    const paymentMethod = fromCurr.substr(0, fromCurr.length - 3);
 
-    if (["ADVC", "PR"].includes(fromCurrType)) host = "s.api.n.exchange";
+    // Loops in staging payment methods array
+    for (const elem in stagingPaymentMethods) {
+      if (stagingPaymentMethods[elem].code === paymentMethod) {
+        stagingPaymentMethod = {
+          code: stagingPaymentMethods[elem].code,
+          name: stagingPaymentMethods[elem].name,
+        };
+        break;
+      }
+    }
 
-    console.log(fromCurrType);
     req.query.pair = getCur(toCurr) + getCur(fromCurr);
     delete req.query.cur_from;
     delete req.query.cur_to;
@@ -77,15 +86,20 @@ const generalHandler = (req, res) => {
   }
 
   if (redirectRequired) {
+    // Redirect to staging url if staging payment method is not undefined
+    if (stagingPaymentMethod) {
+      res.redirect(
+        `https://api.n.exchange/en/orders/buy-${toCurr.toLowerCase()}-with-${getCur(
+          fromCurr
+        ).toLowerCase()}?payment_method=${stagingPaymentMethod.name.toLowerCase()}`
+      );
+      return;
+    }
+
     const redirectUrl = url.format({
       pathname: urlPath === "/" ? `/${lang}` : `/${lang}${urlPath}`,
       query: req.query,
     });
-
-    if (host) {
-      res.redirect(`https://${host}${redirectUrl}`);
-      return;
-    }
 
     res.redirect(redirectUrl);
     return;
