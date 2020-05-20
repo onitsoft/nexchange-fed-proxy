@@ -40,11 +40,11 @@ const generalHandler = (req, res) => {
   const fromCurr = req.query.cur_from;
   const toCurr = req.query.cur_to;
   const validLanguages = ["en", "de", "ru"];
-  const stagingPaymentMethods = [
+  const testPaymentMethods = [
     { code: "ADVC", name: "ADVCASH" },
     { code: "PR", name: "PAYEER" },
   ];
-  let stagingPaymentMethod = undefined;
+  let testPaymentMethod = undefined;
 
   let redirectRequired = false;
 
@@ -63,12 +63,12 @@ const generalHandler = (req, res) => {
   if (fromCurr && toCurr) {
     const paymentMethod = fromCurr.substr(0, fromCurr.length - 3);
 
-    // Loops in staging payment methods array
-    for (const elem in stagingPaymentMethods) {
-      if (stagingPaymentMethods[elem].code === paymentMethod) {
-        stagingPaymentMethod = {
-          code: stagingPaymentMethods[elem].code,
-          name: stagingPaymentMethods[elem].name,
+    // Loops in test payment methods array
+    for (const elem in testPaymentMethods) {
+      if (testPaymentMethods[elem].code === paymentMethod) {
+        testPaymentMethod = {
+          code: testPaymentMethods[elem].code,
+          name: testPaymentMethods[elem].name,
         };
         break;
       }
@@ -86,12 +86,17 @@ const generalHandler = (req, res) => {
   }
 
   if (redirectRequired) {
-    // Redirect to staging url if staging payment method is not undefined
-    if (stagingPaymentMethod) {
+    // Redirect to testing url if testPaymentMethod is not undefined
+    if (testPaymentMethod) {
+      const testUrl =
+        process.env.NODE_ENV !== "production"
+          ? "https://sapi.n.exchange"
+          : "https://api.n.exchange";
+
       res.redirect(
-        `https://api.n.exchange/en/orders/buy-${toCurr.toLowerCase()}-with-${getCur(
+        `${testUrl}/en/orders/buy-${toCurr.toLowerCase()}-with-${getCur(
           fromCurr
-        ).toLowerCase()}?payment_method=${stagingPaymentMethod.name.toLowerCase()}`
+        ).toLowerCase()}?payment_method=${testPaymentMethod.name.toLowerCase()}`
       );
       return;
     }
