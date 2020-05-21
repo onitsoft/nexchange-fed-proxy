@@ -58,6 +58,11 @@ const generalHandler = (req, res) => {
 
     // If lang is in path then ignore lang in param
     delete req.query["lang"];
+  } else {
+    if (languageRedirect) {
+      lang = langInParam || "en";
+      redirectRequired = true;
+    }
   }
 
   if (fromCurr && toCurr) {
