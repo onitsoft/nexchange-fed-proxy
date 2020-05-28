@@ -43,6 +43,7 @@ const generalHandler = (req, res) => {
   const testPaymentMethods = [
     { code: "ADVC", name: "ADVCASH" },
     { code: "PR", name: "PAYEER" },
+    { code: "SEPA", name: "SEPA" },
   ];
   let testPaymentMethod = undefined;
 

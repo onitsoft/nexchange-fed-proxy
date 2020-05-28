@@ -26,18 +26,9 @@ describe("internal redirects", () => {
       expect(res).to.redirectTo(`${requestUrl}/en/order/OQMHDW`, 200);
     });
   });
-
-  //   it("advcash redirect", () => {
-  //     request.get("/?cur_from=ADVCUSD&cur_to=BTC").end((err, res) => {
-  //       expect(res).to.redirectTo(
-  //         "https://sapi.n.exchange/en/orders/buy-btc-with-usd/?payment_method=advcash",
-  //         200
-  //       );
-  //     });
-  //   });
 });
 
-describe("partner redirects", () => {
+describe("partner card redirect", () => {
   it("bestchange card usd to btc", () => {
     request
       .get("/?ref=RBWW77UMGTU&lang=RU&cur_from=CARDUSD&cur_to=BTC")
@@ -47,5 +38,32 @@ describe("partner redirects", () => {
           200
         );
       });
+  });
+
+  it("bestchange advcash redirect", () => {
+    request.get("/?cur_from=ADVCUSD&cur_to=BTC").end((err, res) => {
+      expect(res).to.redirectTo(
+        "https://sapi.n.exchange/en/orders/buy-btc-with-usd/?payment_method=advcash",
+        200
+      );
+    });
+  });
+
+  it("bestchange payeer redirect", () => {
+    request.get("/?cur_from=PRUSD&cur_to=BTC").end((err, res) => {
+      expect(res).to.redirectTo(
+        "https://sapi.n.exchange/en/orders/buy-btc-with-usd/?payment_method=payeer",
+        200
+      );
+    });
+  });
+
+  it("bestchange sepa redirect", () => {
+    request.get("/?cur_from=SEPAUSD&cur_to=BTC").end((err, res) => {
+      expect(res).to.redirectTo(
+        "https://sapi.n.exchange/en/orders/buy-btc-with-usd/?payment_method=sepa",
+        200
+      );
+    });
   });
 });
