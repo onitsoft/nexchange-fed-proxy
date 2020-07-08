@@ -117,7 +117,9 @@ const generalHandler = (req, res) => {
       res.redirect(
         `${testUrl}/en/orders/buy-${toCurr.toLowerCase()}-with-${getCur(
           fromCurr
-        ).toLowerCase()}?payment_method=${testPaymentMethod.name.toLowerCase()}`
+        ).toLowerCase()}/${getCur(toCurr).toUpperCase()}${getCur(
+          fromCurr
+        ).toUpperCase()}/?payment_method=${testPaymentMethod.name.toLowerCase()}`
       );
       return;
     }
