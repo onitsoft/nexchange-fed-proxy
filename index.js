@@ -49,6 +49,21 @@ const generalHandler = (req, res) => {
 
   let redirectRequired = false;
 
+  // remove extra / from url
+  if (urlPath.charAt(urlPath.length - 1) === "/") {
+    urlPath = urlPath.substring(0, urlPath.length - 1);
+    redirectRequired = true;
+  }
+
+  const isForgotPasswordUrl = /\/forgot-password\/\w+(\/)?$/.test(urlPath);
+
+  if (isForgotPasswordUrl) {
+    const token = urlPath.split("/")[urlPath.split("/").length - 1];
+    urlPath = urlPath.replace(`\/${token}`, "");
+    res.header("Set-Cookie", `resetToken=${lang}`);
+    redirectRequired = true;
+  }
+
   // Dont add language path in url if set to false
   if (!languageRedirect) lang = "";
 
