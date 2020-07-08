@@ -59,8 +59,9 @@ const generalHandler = (req, res) => {
 
   if (isForgotPasswordUrl) {
     const token = urlPath.split("/")[urlPath.split("/").length - 1];
+    res.cookie("resetToken", token);
+
     urlPath = urlPath.replace(`\/${token}`, "");
-    res.header("Set-Cookie", `resetToken=${lang}`);
     redirectRequired = true;
   }
 
@@ -68,7 +69,7 @@ const generalHandler = (req, res) => {
   if (!languageRedirect) lang = "";
 
   if (validLanguages.includes(langInPath)) {
-    res.header("Set-Cookie", `i18next=${lang}`);
+    res.cookie("i18next", lang);
 
     urlPath = urlPath.substr(lang.length + 1);
 
